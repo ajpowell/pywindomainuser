@@ -3,7 +3,7 @@ adcheck.py
 
 Python code to check if users have Active Directory account.
 
-Users 'net user <user> /DOMAIN' as I was unable to install ldap libraries
+Uses 'net user <user> /DOMAIN' as I was unable to install ldap libraries
 
 '''
 
