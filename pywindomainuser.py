@@ -3,17 +3,39 @@
 
     python class to call 'net user <userid> /DOMAIN' to check if the
     supplied user is a member of the domain - if they are, then various 
-    details are returned
+    details are returned.
+
 '''
 
 import subprocess
 import logging
+import os
+import platform
 
 class pywindomainuser:
     # Constructor
     def __init__(self):
-        # TODO: Check that this is a Windows system
-        # TODO: Check that net exists 
+        # Check that this is a Windows system
+        __platform = platform.system()
+
+        logging.info('>>> Platform       : {}'.format(__platform))
+        if(__platform.lower() != 'windows'):
+            print('ERROR: pywindomainuser will only work on Windows systems')
+            print('       Platform identified as {}'.format(__platform))
+            exit -1
+
+        # Check that net.exe exists 
+        __net_filename = 'net.exe'
+        __windows_directory = os.getenv('windir')
+        logging.info('>>> Windir         : {}'.format(__windows_directory))
+
+        __net_filepath = os.path.join(os.path.join(__windows_directory, 'System32'), __net_filename)
+        logging.info('>>> net.exe path   : {}'.format(__net_filepath))
+
+        if not os.path.exists(__net_filepath):
+            print('ERROR: net.exe not found on this system')
+            exit -1
+
         self.__include_lines = (
                 'User name',
                 'Full Name',
@@ -77,20 +99,21 @@ class pywindomainuser:
         return fielddata
 
     def checkADUser(self, username, output):
-        user = username.upper()
+        __user = username.upper()
 
-        command = ['net', 'user', user, '/DOMAIN']
+        command = ['net', 'user', __user, '/DOMAIN']
 
         __output = []
+
         retcode = self.__run_command(command, self.__include_lines, __output)
 
         # Get fields
-        ADUserName = self.getFieldData(__output,'User name')
-        ADFullUserName = self.getFieldData(__output,'Full Name')
-        ADAccountActive = self.getFieldData(__output,'Account active')
-        ADLastLogon = self.getFieldData(__output,'Last logon')
-        ADPasswordLastSet = self.getFieldData(__output,'Password last set')
-        ADPasswordExpires = self.getFieldData(__output,'Password expires')
+        __ADUserName = self.__getFieldData(__output,'User name')
+        __ADFullUserName = self.__getFieldData(__output,'Full Name')
+        __ADAccountActive = self.__getFieldData(__output,'Account active')
+        __ADLastLogon = self.__getFieldData(__output,'Last logon')
+        __ADPasswordLastSet = self.__getFieldData(__output,'Password last set')
+        __ADPasswordExpires = self.__getFieldData(__output,'Password expires')
 
         #print('@Username:   {}'.format(ADUserName))
         #print('@Fullname:   {}'.format(ADFullUserName))
@@ -102,12 +125,17 @@ class pywindomainuser:
         #    ADPasswordLastSet,ADPasswordExpires))
 
         output = { 
-            'ADUserName': ADUserName,
-            'ADFullUserName': ADFullUserName,
-            'ADAccountActive': ADAccountActive,
-            'ADLastLogon': ADLastLogon,
-            'ADPasswordLastSet': ADPasswordLastSet,
-            'ADPasswordExpires': ADPasswordExpires
+            'ADUserName': __ADUserName,
+            'ADFullUserName': __ADFullUserName,
+            'ADAccountActive': __ADAccountActive,
+            'ADLastLogon': __ADLastLogon,
+            'ADPasswordLastSet': __ADPasswordLastSet,
+            'ADPasswordExpires': __ADPasswordExpires
         }
 
+        print(output)
+
         return retcode
+
+if __name__ == '__main__':
+    pass

@@ -6,17 +6,31 @@
 '''
 
 import pywindomainuser
+import logging
+
+logging.root.handlers = []
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    #datefmt='%Y-%m-%d %H:%M:%S',
+    level=logging.INFO
+    #level=logging.DEBUG
+    )
 
 user = pywindomainuser.pywindomainuser()
 
 def main():
     print('\ntest.py\n\n')
 
-    output = ''
+    userdetails = ''
 
-    retcode = user.checkADUser('qozb', output)
+    retcode = user.checkADUser('qozb', userdetails)
 
-    print(output)
+    # TODO: Missing something obvious here, but userdetails not returned
+    print(userdetails)
+
+    print('')
+    print('ADFullUserName : {}'.format(userdetails.ADFullUserName))
+    print('ADLastLogon    : {}'.format(userdetails['ADLastLogon']))
 
 if __name__ == '__main__':
     main()
