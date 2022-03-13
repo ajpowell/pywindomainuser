@@ -11,6 +11,7 @@ import subprocess
 import logging
 import os
 import platform
+import sys
 
 class pywindomainuser:
     # Constructor
@@ -22,7 +23,7 @@ class pywindomainuser:
         if(__platform.lower() != 'windows'):
             print('ERROR: pywindomainuser will only work on Windows systems')
             print('       Platform identified as {}'.format(__platform))
-            exit -1
+            sys.exit(-1)
 
         # Check that net.exe exists 
         __net_filename = 'net.exe'
@@ -34,7 +35,7 @@ class pywindomainuser:
 
         if not os.path.exists(__net_filepath):
             print('ERROR: net.exe not found on this system')
-            exit -1
+            sys.exit(-1)
 
         self.__include_lines = (
                 'User name',
