@@ -12,6 +12,7 @@ import logging
 import os
 import platform
 import sys
+import json
 
 class pywindomainuser:
     # Constructor
@@ -45,6 +46,7 @@ class pywindomainuser:
                 'Password last set',
                 'Password expires'
                 )
+
 
     def __format_output(self,command_output, processed_output, include_lines):
         #print(command_output)
@@ -88,6 +90,7 @@ class pywindomainuser:
         
         return return_code  
 
+
     def __getFieldData(self, output, field):
         fielddata = ''
         for line in output:
@@ -99,7 +102,8 @@ class pywindomainuser:
         
         return fielddata
 
-    def checkADUser(self, username, output):
+
+    def checkADUser(self, username):
         __user = username.upper()
 
         command = ['net', 'user', __user, '/DOMAIN']
@@ -125,18 +129,16 @@ class pywindomainuser:
         #    ADFullUserName, ADAccountActive, ADLastLogon,
         #    ADPasswordLastSet,ADPasswordExpires))
 
-        output = { 
-            'ADUserName': __ADUserName,
-            'ADFullUserName': __ADFullUserName,
-            'ADAccountActive': __ADAccountActive,
-            'ADLastLogon': __ADLastLogon,
-            'ADPasswordLastSet': __ADPasswordLastSet,
-            'ADPasswordExpires': __ADPasswordExpires
+        output = {
+            "ADUserName": __ADUserName,
+            "ADFullUserName": __ADFullUserName,
+            "ADAccountActive": __ADAccountActive,
+            "ADLastLogon": __ADLastLogon,
+            "ADPasswordLastSet": __ADPasswordLastSet,
+            "ADPasswordExpires": __ADPasswordExpires
         }
 
-        print(output)
-
-        return retcode
+        return output
 
 if __name__ == '__main__':
     pass

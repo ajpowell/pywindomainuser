@@ -19,18 +19,22 @@ logging.basicConfig(
 user = pywindomainuser.pywindomainuser()
 
 def main():
-    print('\ntest.py\n\n')
+    print('')
+    logging.info('test.py')
+    print('')
 
-    userdetails = ''
+    userdetails = user.checkADUser('qozb')
 
-    retcode = user.checkADUser('qozb', userdetails)
-
-    # TODO: Missing something obvious here, but userdetails not returned
-    print(userdetails)
+    logging.info(userdetails)
 
     print('')
-    print('ADFullUserName : {}'.format(userdetails.ADFullUserName))
-    print('ADLastLogon    : {}'.format(userdetails['ADLastLogon']))
+
+    logging.info('ADFullUserName : {}'.format(userdetails['ADFullUserName']))
+    logging.info('ADLastLogon    : {}'.format(userdetails['ADLastLogon']))
+
+    print('')
+    logging.info('Done.')
+
 
 if __name__ == '__main__':
     main()
